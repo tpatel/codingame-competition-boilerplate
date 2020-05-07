@@ -1,0 +1,22 @@
+{
+  "name": "codingame-competition-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for a codingame competition",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "ENV=test node index.js",
+    "local": "ENV=dev node index.js",
+    "debug": "ENV=dev node --inspect-brk index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tpatel/codingame-competition-boilerplate.git"
+  },
+  "author": "https://github.com/tpatel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tpatel/codingame-competition-boilerplate/issues"
+  },
+  "homepage": "https://github.com/tpatel/codingame-competition-boilerplate#readme"
+}
