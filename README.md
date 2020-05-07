@@ -1,6 +1,6 @@
 # README
 
-This is a JavaScript boilerplate to get started quickly on a CodinGame challenge. Use this with the Codigame Sync tools (https://chrome.google.com/webstore/detail/codingame-sync-ext/ldjnbdgcceengbjkalemckffhaajkehd && https://chrome.google.com/webstore/detail/codingame-sync-app/nmdombhgnofjnnaenegcdehnbkajfgbh).
+This is a JavaScript boilerplate to get started quickly on a CodinGame challenge. Use this with the Codigame Sync tools ([extension](https://chrome.google.com/webstore/detail/codingame-sync-ext/ldjnbdgcceengbjkalemckffhaajkehd) && [app](https://chrome.google.com/webstore/detail/codingame-sync-app/nmdombhgnofjnnaenegcdehnbkajfgbh)).
 
 I'm streaming my progress on [twitch.tv/thibpat](https://twitch.tv/thibpat) so feel free to join us!
 
