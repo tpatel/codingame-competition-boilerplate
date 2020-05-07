@@ -1,10 +1,10 @@
-if (typeof readline === "undefined") {
+if (typeof readline === 'undefined') {
   //This remove the "undefined readline" in node.js
   global.readline = () => {
-    console.log("no readline here...");
+    console.log('no readline here...');
   };
 }
-const { performance } = require("perf_hooks");
+const { performance } = require('perf_hooks');
 
 let state = {
   turn: 0,
@@ -14,9 +14,9 @@ const time = {};
 
 // Constants
 const ACTIONS = {
-  READ_INPUT: "read-input",
-  PLAY: "play",
-  SIMULATE_PLAY: "simulate-play",
+  READ_INPUT: 'read-input',
+  PLAY: 'play',
+  SIMULATE_PLAY: 'simulate-play',
 };
 
 function readInput(state, action, params) {
@@ -47,13 +47,83 @@ function update(state, action, params) {
     case ACTIONS.PLAY:
       return play(state, action, params);
     default:
-      console.error("Action not defined", action);
+      console.error('Action not defined', action);
   }
 }
 
 class Distance {
   static manhattan(a, b) {
     return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+  }
+
+  static euclidian(a, b) {
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+}
+
+class Map {
+  static WIDTH = 10;
+  static HEIGHT = 10;
+
+  static isInMap(position) {
+    return (
+      position.x > 0 &&
+      position.x < Map.WIDTH &&
+      position.y > 0 &&
+      position.y < Map.HEIGHT
+    );
+  }
+
+  static getNeighbors(map, position) {}
+}
+
+class PathFinding {
+  static positionToInteger(position) {
+    return position.y * 1000 + position.x;
+  }
+
+  static DSF(map, getNeighbors, from, to) {
+    const discovered = new Set();
+    const stack = [];
+    stack.push(from);
+
+    while (stack.length > 0) {
+      const current = stack.pop();
+      const currentID = PathFinding.positionToInteger(current);
+      if (!discovered.has(currentID)) {
+        discovered.add(currentID);
+        getNeighbors(map, current).forEach((neighbor) => {
+          stack.push(neighbor);
+        });
+      }
+    }
+  }
+
+  static BFS(map, getNeighbors, from, to) {
+    const toID = PathFinding.positionToInteger(to);
+    const discovered = new Set();
+    const queue = [];
+    queue.push(from);
+    discovered.add(PathFinding.positionToInteger(from));
+
+    while (queue.length > 0) {
+      const current = queue.shift();
+      const currentID = PathFinding.positionToInteger(current);
+
+      if (currentID == toID) {
+        return current;
+      }
+      getNeighbors(map, current).forEach((neighbor) => {
+        const neighborID = PathFinding.positionToInteger(neighbor);
+        if (!discovered.has(neighborID)) {
+          discovered.add(neighborID);
+          queue.push({
+            ...neighbor,
+            parent: current,
+          });
+        }
+      });
+    }
   }
 }
 
@@ -141,13 +211,40 @@ class Negamax {
   }
 }
 
-if (process.env.ENV == "test") {
-  const assert = require("assert").strict;
+if (process.env.ENV == 'test') {
+  const assert = require('assert').strict;
+  let res;
 
   assert(Distance.manhattan({ x: 0, y: 0 }, { x: 1, y: 1 }) === 2);
   assert(Distance.manhattan({ x: 0, y: 0 }, { x: 0, y: 0 }) === 0);
 
-  console.log("Tests ran successfully ✅");
+  assert(Distance.euclidian({ x: 0, y: 0 }, { x: 1, y: 1 }) === Math.sqrt(2));
+  assert(Distance.euclidian({ x: 0, y: 0 }, { x: 0, y: 0 }) === 0);
+  assert(Distance.euclidian({ x: 0, y: 0 }, { x: 1, y: 0 }) === 1);
+
+  res = PathFinding.BFS([], () => {}, { x: 0, y: 0 }, { x: 0, y: 0 });
+  assert(res.x == 0 && res.y == 0 && !res.parent);
+
+  res = PathFinding.BFS(
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    (map, position) => {
+      return [
+        { ...position, x: position.x - 1 },
+        { ...position, x: position.x + 1 },
+      ].filter((p) => p.x >= 0 && p.x < map.length);
+    },
+    { x: 0, y: 0 },
+    { x: 2, y: 0 }
+  );
+  assert(
+    res.x == 2 &&
+      res.y == 0 &&
+      res.parent.x == 1 &&
+      res.parent.parent.x == 0 &&
+      !res.parent.parent.parent
+  );
+
+  console.log('Tests ran successfully ✅');
   process.exit(0);
 }
 
@@ -155,7 +252,7 @@ if (process.env.ENV == "test") {
 while (true) {
   time.mainLoop = 0;
 
-  if (process.env.ENV == "dev") {
+  if (process.env.ENV == 'dev') {
     state = {}; // Paste the state of the game that you want to debug locally here
   } else {
     state = update(state, ACTIONS.READ_INPUT);
@@ -176,5 +273,5 @@ while (true) {
   console.error({ ...time });
   console.error(JSON.stringify(state));
 
-  if (process.env.ENV == "dev") break;
+  if (process.env.ENV == 'dev') break;
 }
