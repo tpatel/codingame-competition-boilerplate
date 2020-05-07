@@ -1,4 +1,4 @@
-# README
+# CodinGame JavaScript Competition Boilerplate
 
 This is a JavaScript boilerplate to get started quickly on a CodinGame challenge. Use this with the Codigame Sync tools ([extension](https://chrome.google.com/webstore/detail/codingame-sync-ext/ldjnbdgcceengbjkalemckffhaajkehd) && [app](https://chrome.google.com/webstore/detail/codingame-sync-app/nmdombhgnofjnnaenegcdehnbkajfgbh)).
 
