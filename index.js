@@ -82,7 +82,7 @@ class PathFinding {
     return position.y * 1000 + position.x;
   }
 
-  static DSF(map, getNeighbors, from, to) {
+  static DFS(map, getNeighbors, from, to) {
     const discovered = new Set();
     const stack = [];
     stack.push(from);
